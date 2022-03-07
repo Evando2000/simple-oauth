@@ -90,7 +90,7 @@ func main() {
 	}
 
 	docs.SwaggerInfo.BasePath = "/oauth"
-	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+	router.GET("/docs", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	port := getEnv("PORT", "8080")
 	router.Run(":" + port)
 }
