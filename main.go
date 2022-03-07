@@ -78,7 +78,7 @@ func main() {
 	prepare(*userDB)
 
 	router := gin.New()
-	router.SetTrustedProxies([]string{"localhost", "infralabs.cs.ui.ac.id"})
+	router.SetTrustedProxies([]string{"localhost", "infralabs.cs.ui.ac.id", "herokuapp.com"})
 
 	// Simple group: OAuth
 	oauth := router.Group("/oauth")
