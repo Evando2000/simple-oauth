@@ -42,19 +42,29 @@ func prepare(client redis.Client) {
 
 }
 
-var tokenDB = redis.NewClient(&redis.Options{
-	Addr:     getEnv("REDIS_URL", "localhost:6379"),
-	Password: getEnv("REDIS_PASSWORD", ""),
-	DB:       0,
-})
+var tokenDB *redis.Client
+var userDB *redis.Client
 
-var userDB = redis.NewClient(&redis.Options{
-	Addr:     getEnv("REDIS_URL", "localhost:6379"),
-	Password: getEnv("REDIS_PASSWORD", ""),
-	DB:       1,
-})
+// var tokenDB = redis.NewClient(&redis.Options{
+// 	Addr:     getEnv("REDIS_URL", "localhost:6379"),
+// 	Password: getEnv("REDIS_PASSWORD", ""),
+// 	DB:       0,
+// })
+
+// var userDB = redis.NewClient(&redis.Options{
+// 	Addr:     getEnv("REDIS_URL", "localhost:6379"),
+// 	Password: getEnv("REDIS_PASSWORD", ""),
+// 	DB:       1,
+// })
 
 func main() {
+	opt, errDB := redis.ParseURL(getEnv("REDIS_URL", "localhost:6379"))
+	if errDB != nil {
+		panic(errDB)
+	}
+	tokenDB = redis.NewClient(opt)
+	userDB = redis.NewClient(opt)
+
 	_, err := tokenDB.Ping().Result()
 	if err != nil {
 		log.Fatal(err)
