@@ -18,7 +18,7 @@ const docTemplate = `{
     "paths": {
         "/resource": {
             "post": {
-                "description": "This function will return resource if user is authorized",
+                "description": "This function will return the resource if user is authorized",
                 "consumes": [
                     "application/x-www-form-urlencoded"
                 ],
@@ -47,13 +47,7 @@ const docTemplate = `{
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "404": {
-                        "description": "Can not find username",
-                        "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/main.FailedResponse"
                         }
                     }
                 }
@@ -61,7 +55,7 @@ const docTemplate = `{
         },
         "/token": {
             "post": {
-                "description": "create new token if not exists/expired",
+                "description": "This function will create new access_token and refresh_token if existing user does not have both. It will return current access_token and refresh_token if user's access_token or refresh_token is not expired yet.",
                 "consumes": [
                     "application/x-www-form-urlencoded"
                 ],
@@ -124,13 +118,7 @@ const docTemplate = `{
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "404": {
-                        "description": "Can not find username",
-                        "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/main.FailedResponse"
                         }
                     }
                 }
@@ -138,7 +126,7 @@ const docTemplate = `{
         },
         "/token/refresh": {
             "post": {
-                "description": "create new token if refresh_token is still valid. If not, return existing token",
+                "description": "This function will create new access_token and refresh_token if refresh_token is still valid. If new tokens are created then old tokens will be deleted",
                 "consumes": [
                     "application/x-www-form-urlencoded"
                 ],
@@ -169,13 +157,86 @@ const docTemplate = `{
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/main.FailedResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/register": {
+            "post": {
+                "description": "This function will create a new user if does not exist. It will also create user's access_token with refresh_token",
+                "consumes": [
+                    "application/x-www-form-urlencoded"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "register new user and get access token with refresh token",
+                "parameters": [
+                    {
+                        "minLength": 1,
+                        "type": "string",
+                        "description": "Please insert username",
+                        "name": "username",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "minLength": 1,
+                        "type": "string",
+                        "description": "Please insert password",
+                        "name": "password",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "minLength": 1,
+                        "type": "string",
+                        "description": "Please insert full_name",
+                        "name": "full_name",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "minLength": 1,
+                        "type": "string",
+                        "description": "Please insert npm",
+                        "name": "npm",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "minLength": 1,
+                        "type": "string",
+                        "description": "Please insert client_id",
+                        "name": "client_id",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "minLength": 1,
+                        "type": "string",
+                        "description": "Please insert client_secret",
+                        "name": "client_secret",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.TokenInfoResponse"
                         }
                     },
-                    "404": {
-                        "description": "Can not find username",
+                    "401": {
+                        "description": "Unauthorized",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/main.FailedResponse"
                         }
                     }
                 }
@@ -183,6 +244,17 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "main.FailedResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                },
+                "error_description": {
+                    "type": "string"
+                }
+            }
+        },
         "main.TokenInfoResponse": {
             "type": "object",
             "properties": {

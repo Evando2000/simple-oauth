@@ -1,4 +1,11 @@
 definitions:
+  main.FailedResponse:
+    properties:
+      error:
+        type: string
+      error_description:
+        type: string
+    type: object
   main.TokenInfoResponse:
     properties:
       access_token:
@@ -19,7 +26,7 @@ paths:
     post:
       consumes:
       - application/x-www-form-urlencoded
-      description: This function will return resource if user is authorized
+      description: This function will return the resource if user is authorized
       parameters:
       - description: Please insert access_token
         in: header
@@ -35,11 +42,7 @@ paths:
         "401":
           description: Unauthorized
           schema:
-            type: string
-        "404":
-          description: Can not find username
-          schema:
-            type: string
+            $ref: '#/definitions/main.FailedResponse'
       summary: get resource if authorized
       tags:
       - Resource
@@ -47,7 +50,9 @@ paths:
     post:
       consumes:
       - application/x-www-form-urlencoded
-      description: create new token if not exists/expired
+      description: This function will create new access_token and refresh_token if
+        existing user does not have both. It will return current access_token and
+        refresh_token if user's access_token or refresh_token is not expired yet.
       parameters:
       - description: Please insert username
         in: formData
@@ -89,11 +94,7 @@ paths:
         "401":
           description: Unauthorized
           schema:
-            type: string
-        "404":
-          description: Can not find username
-          schema:
-            type: string
+            $ref: '#/definitions/main.FailedResponse'
       summary: get access token and refresh token
       tags:
       - Token
@@ -101,8 +102,9 @@ paths:
     post:
       consumes:
       - application/x-www-form-urlencoded
-      description: create new token if refresh_token is still valid. If not, return
-        existing token
+      description: This function will create new access_token and refresh_token if
+        refresh_token is still valid. If new tokens are created then old tokens will
+        be deleted
       parameters:
       - description: Please insert refresh_token
         in: formData
@@ -120,13 +122,66 @@ paths:
         "401":
           description: Unauthorized
           schema:
-            type: string
-        "404":
-          description: Can not find username
-          schema:
-            type: string
+            $ref: '#/definitions/main.FailedResponse'
       summary: will create new access_token and refresh_token if refresh_token is
         valid
       tags:
       - Token
+  /user/register:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: This function will create a new user if does not exist. It will
+        also create user's access_token with refresh_token
+      parameters:
+      - description: Please insert username
+        in: formData
+        minLength: 1
+        name: username
+        required: true
+        type: string
+      - description: Please insert password
+        in: formData
+        minLength: 1
+        name: password
+        required: true
+        type: string
+      - description: Please insert full_name
+        in: formData
+        minLength: 1
+        name: full_name
+        required: true
+        type: string
+      - description: Please insert npm
+        in: formData
+        minLength: 1
+        name: npm
+        required: true
+        type: string
+      - description: Please insert client_id
+        in: formData
+        minLength: 1
+        name: client_id
+        required: true
+        type: string
+      - description: Please insert client_secret
+        in: formData
+        minLength: 1
+        name: client_secret
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.TokenInfoResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/main.FailedResponse'
+      summary: register new user and get access token with refresh token
+      tags:
+      - User
 swagger: "2.0"
