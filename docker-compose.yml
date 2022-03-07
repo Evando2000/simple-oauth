@@ -1,0 +1,29 @@
+version: '3.9'
+
+services:
+  web:
+    container_name: simple-go-auth-cont
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: bash deployment.sh
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    depends_on:
+      - db
+    networks:
+      - goauthnet
+
+  db:
+    container_name: redis-simple-go-auth-cont
+    image: redis:7.0-rc2
+    command: redis-server --requirepass tm1lawauth
+    ports:
+      - "6379:6379"
+    networks:
+      - goauthnet
+
+networks:
+  goauthnet:

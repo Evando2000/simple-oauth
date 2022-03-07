@@ -1,0 +1,132 @@
+definitions:
+  main.TokenInfoResponse:
+    properties:
+      access_token:
+        type: string
+      expires_in:
+        type: integer
+      refresh_token:
+        type: string
+      scope:
+        type: string
+      token_type:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /resource:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: This function will return resource if user is authorized
+      parameters:
+      - description: Please insert access_token
+        in: header
+        name: Authorization
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.TokenInfoResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "404":
+          description: Can not find username
+          schema:
+            type: string
+      summary: get resource if authorized
+      tags:
+      - Resource
+  /token:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: create new token if not exists/expired
+      parameters:
+      - description: Please insert username
+        in: formData
+        minLength: 1
+        name: username
+        required: true
+        type: string
+      - description: Please insert password
+        in: formData
+        minLength: 1
+        name: password
+        required: true
+        type: string
+      - description: Please insert grant_type
+        in: formData
+        minLength: 1
+        name: grant_type
+        required: true
+        type: string
+      - description: Please insert client_id
+        in: formData
+        minLength: 1
+        name: client_id
+        required: true
+        type: string
+      - description: Please insert client_secret
+        in: formData
+        minLength: 1
+        name: client_secret
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.TokenInfoResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "404":
+          description: Can not find username
+          schema:
+            type: string
+      summary: get access token and refresh token
+      tags:
+      - Token
+  /token/refresh:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: create new token if refresh_token is still valid. If not, return
+        existing token
+      parameters:
+      - description: Please insert refresh_token
+        in: formData
+        minLength: 1
+        name: refresh_token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.TokenInfoResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "404":
+          description: Can not find username
+          schema:
+            type: string
+      summary: will create new access_token and refresh_token if refresh_token is
+        valid
+      tags:
+      - Token
+swagger: "2.0"
