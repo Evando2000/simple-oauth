@@ -45,19 +45,17 @@ func prepare(client redis.Client) {
 
 }
 
-var tokenDB = redis.NewClient(&redis.Options{
-	Addr:     getEnv("REDIS_URL", "localhost:6379"),
-	Password: getEnv("REDIS_PASSWORD", ""),
-	DB:       0,
-})
-
-var userDB = redis.NewClient(&redis.Options{
-	Addr:     getEnv("REDIS_URL", "localhost:6379"),
-	Password: getEnv("REDIS_PASSWORD", ""),
-	DB:       1,
-})
+var tokenDB *redis.Client
+var userDB *redis.Client
 
 func main() {
+	opt, errDB := redis.ParseURL(getEnv("REDIS_URL", "localhost:6379"))
+	if errDB != nil {
+		panic(errDB)
+	}
+	tokenDB = redis.NewClient(opt)
+	userDB = redis.NewClient(opt)
+
 	_, err := tokenDB.Ping().Result()
 	if err != nil {
 		log.Fatal(err)
@@ -71,7 +69,7 @@ func main() {
 	prepare(*userDB)
 
 	router := gin.New()
-	router.SetTrustedProxies([]string{"localhost", "infralabs.cs.ui.ac.id"})
+	router.SetTrustedProxies([]string{"localhost", "infralabs.cs.ui.ac.id", "herokuapp.com"})
 
 	// Simple group: OAuth
 	oauth := router.Group("/oauth")
@@ -84,5 +82,6 @@ func main() {
 
 	docs.SwaggerInfo.BasePath = "/oauth"
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
-	router.Run(":8080")
+	port := getEnv("PORT", "8080")
+	router.Run(":" + port)
 }
