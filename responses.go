@@ -30,7 +30,7 @@ func resourceSuccessResponseConstructor(c *gin.Context, tokenInfo TokenInfo, use
 		"user_id":       userInfo.Username,
 		"full_name":     userInfo.Fullname,
 		"npm":           userInfo.Npm,
-		"expires":       nil,
+		"expires":       int(tokenInfo.AccessTokenExpireAt.Sub(time.Now()).Seconds()),
 		"refresh_token": tokenInfo.RefreshToken,
 	})
 }

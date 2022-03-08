@@ -24,11 +24,14 @@ func getEnv(key, defaultValue string) string {
 
 func prepare(client redis.Client) {
 	unicornPass := hashPassword("coba123")
+	clientSecret := hashPassword("1231")
 	newUser := User{
-		Username: "unicorn",
-		Password: unicornPass,
-		Fullname: "Budi Anduk",
-		Npm:      "1406123456",
+		Username:     "unicorn",
+		Password:     unicornPass,
+		Fullname:     "Budi Anduk",
+		Npm:          "1406123456",
+		ClientId:     "7162",
+		ClientSecret: clientSecret,
 	}
 	user, err := json.Marshal(newUser)
 	if err != nil {
@@ -42,29 +45,19 @@ func prepare(client redis.Client) {
 
 }
 
-var tokenDB *redis.Client
-var userDB *redis.Client
+var tokenDB = redis.NewClient(&redis.Options{
+	Addr:     getEnv("REDIS_URL", "localhost:6379"),
+	Password: getEnv("REDIS_PASSWORD", ""),
+	DB:       0,
+})
 
-// var tokenDB = redis.NewClient(&redis.Options{
-// 	Addr:     getEnv("REDIS_URL", "localhost:6379"),
-// 	Password: getEnv("REDIS_PASSWORD", ""),
-// 	DB:       0,
-// })
-
-// var userDB = redis.NewClient(&redis.Options{
-// 	Addr:     getEnv("REDIS_URL", "localhost:6379"),
-// 	Password: getEnv("REDIS_PASSWORD", ""),
-// 	DB:       1,
-// })
+var userDB = redis.NewClient(&redis.Options{
+	Addr:     getEnv("REDIS_URL", "localhost:6379"),
+	Password: getEnv("REDIS_PASSWORD", ""),
+	DB:       1,
+})
 
 func main() {
-	opt, errDB := redis.ParseURL(getEnv("REDIS_URL", "localhost:6379"))
-	if errDB != nil {
-		panic(errDB)
-	}
-	tokenDB = redis.NewClient(opt)
-	userDB = redis.NewClient(opt)
-
 	_, err := tokenDB.Ping().Result()
 	if err != nil {
 		log.Fatal(err)
@@ -78,7 +71,7 @@ func main() {
 	prepare(*userDB)
 
 	router := gin.New()
-	router.SetTrustedProxies([]string{"localhost", "infralabs.cs.ui.ac.id", "herokuapp.com"})
+	router.SetTrustedProxies([]string{"localhost", "infralabs.cs.ui.ac.id"})
 
 	// Simple group: OAuth
 	oauth := router.Group("/oauth")
@@ -90,7 +83,6 @@ func main() {
 	}
 
 	docs.SwaggerInfo.BasePath = "/oauth"
-	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
-	port := getEnv("PORT", "8080")
-	router.Run(":" + port)
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+	router.Run(":8080")
 }

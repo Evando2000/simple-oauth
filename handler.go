@@ -36,16 +36,24 @@ func createTokenHandler(c *gin.Context) {
 		return
 	}
 
-	errPass := passwordValidator(user.Password, newRequest.Password)
+	errPass := secretValidator(user.Password, newRequest.Password)
 	if errPass != nil {
 		failedResponseConstructor(c, ErrInvalidUserPass)
 		return
 	}
 
-	// if newRequest.Password != user.Password {
-	// 	failedResponseConstructor(c, ErrInvalidUserPass)
-	// 	return
-	// }
+	errClientId := clientCredentialValidator(user.ClientId, newRequest.ClientId)
+	if errClientId != nil {
+		failedResponseConstructor(c, errClientId.Error())
+		return
+	}
+
+	errClientSecret := secretValidator(user.ClientSecret, newRequest.ClientSecret)
+	if errClientSecret != nil {
+		failedResponseConstructor(c, ErrInvalidClientCreds)
+		return
+	}
+
 	if user.AccessToken != "" {
 		existedToken, err := getTokenInfoByAccessToken(user.AccessToken)
 		if err != nil {

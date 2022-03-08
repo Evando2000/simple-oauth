@@ -15,7 +15,7 @@
 5. [POST] /oauth/user/register
 
 ## Port:
-1. Web: 8080
+1. Web: 8080 (local) or 25445 (infralabs)
 2. DB: 6379
 
 ## How to run:

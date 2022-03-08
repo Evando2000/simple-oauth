@@ -9,6 +9,8 @@ type User struct {
 	Npm          string `json:"npm"`
 	AccessToken  string `json:"access_token"`
 	RefreshToken string `json:"refresh_token"`
+	ClientId     string `json:"client_id"`
+	ClientSecret string `json:"client_secret"`
 }
 
 type TokenInfo struct {

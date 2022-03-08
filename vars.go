@@ -12,6 +12,7 @@ var ErrInvalidClientID = "client_id invalid"
 var ErrInvalidClientSecret = "client_secret invalid"
 var ErrInvalidFullName = "full_name invalid"
 var ErrInvalidNpm = "npm invalid"
+var ErrInvalidClientCreds = "client credentials invalid"
 
 var ErrUserNotFound = "user not found"
 var ErrUserExisted = "user already existed"

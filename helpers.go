@@ -20,9 +20,16 @@ func hashPassword(password string) string {
 	return string(hashedPwd)
 }
 
-func passwordValidator(password string, password2 string) error {
-	errPass := bcrypt.CompareHashAndPassword([]byte(password), []byte(password2))
+func secretValidator(secret string, secret2 string) error {
+	errPass := bcrypt.CompareHashAndPassword([]byte(secret), []byte(secret2))
 	return errPass
+}
+
+func clientCredentialValidator(cred string, reqCred string) error {
+	if cred != reqCred {
+		return errors.New(ErrInvalidClientCreds)
+	}
+	return nil
 }
 
 func getUserByUsername(username string) (*User, error) {
@@ -302,11 +309,15 @@ func validateUserHandler(c *gin.Context) (*createUserRequest, error) {
 
 func createUser(userReq createUserRequest) (*User, error) {
 	newUserPwd := hashPassword(userReq.Password)
+	newUserClientSecret := hashPassword(userReq.ClientSecret)
+
 	newUser := User{
-		Username: userReq.Username,
-		Password: newUserPwd,
-		Fullname: userReq.Fullname,
-		Npm:      userReq.Npm,
+		Username:     userReq.Username,
+		Password:     newUserPwd,
+		Fullname:     userReq.Fullname,
+		Npm:          userReq.Npm,
+		ClientId:     userReq.ClientId,
+		ClientSecret: newUserClientSecret,
 	}
 
 	user, err := json.Marshal(newUser)
