@@ -74,7 +74,18 @@ func getRefreshTokenInfoByRefreshToken(refreshToken string) (*RefreshTokenInfo, 
 	return &tokenInfo, nil
 }
 
+func validateRequestHeader(c *gin.Context) error {
+	if c.Request.Header.Get("Content-Type") != "application/x-www-form-urlencoded" {
+		return errors.New(ErrUnsupportedContentType)
+	}
+	return nil
+}
+
 func validateTokenHandler(c *gin.Context) (*createTokenRequest, error) {
+	err := validateRequestHeader(c)
+	if err != nil {
+		return nil, err
+	}
 	username := c.PostForm("username")
 	if username == "" {
 		err := errors.New(ErrInvalidUserPass)
@@ -177,7 +188,11 @@ func createToken(clientId string, clientSecret string, username string) (*TokenI
 }
 
 func validateResourceHandler(c *gin.Context) (*TokenInfo, *User, error) {
-	errFlag := false
+	err := validateRequestHeader(c)
+	if err != nil {
+		return nil, nil, err
+	}
+
 	auth := c.Request.Header["Authorization"]
 
 	if len(auth) != 1 {
@@ -197,7 +212,7 @@ func validateResourceHandler(c *gin.Context) (*TokenInfo, *User, error) {
 	}
 
 	tokenInfo, err := getTokenInfoByAccessToken(accessToken)
-	if !errFlag && err != nil {
+	if err != nil {
 		err := errors.New(ErrAccessTokenUnregistered)
 		return nil, nil, err
 	}
@@ -205,18 +220,18 @@ func validateResourceHandler(c *gin.Context) (*TokenInfo, *User, error) {
 	refreshTokenInfo, _ := getRefreshTokenInfoByRefreshToken(accessToken)
 	thisRefreshTokenInfo, _ := getTokenInfoByAccessToken(refreshTokenInfo.AccessToken)
 
-	if !errFlag && thisRefreshTokenInfo.RefreshToken == accessToken {
+	if thisRefreshTokenInfo.RefreshToken == accessToken {
 		err := errors.New(ErrAccessTokenUnregistered)
 		return nil, nil, err
 	}
 
-	if !errFlag && time.Now().After(tokenInfo.AccessTokenExpireAt) {
+	if time.Now().After(tokenInfo.AccessTokenExpireAt) {
 		err := errors.New(ErrAccessTokenExpired)
 		return nil, nil, err
 	}
 
 	userInfo, err := getUserByUsername(tokenInfo.Username)
-	if !errFlag && err != nil {
+	if err != nil {
 		err := errors.New(ErrUserNotFound)
 		return nil, nil, err
 	}

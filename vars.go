@@ -13,6 +13,7 @@ var ErrInvalidClientSecret = "client_secret invalid"
 var ErrInvalidFullName = "full_name invalid"
 var ErrInvalidNpm = "npm invalid"
 var ErrInvalidClientCreds = "client credentials invalid"
+var ErrUnsupportedContentType = "content-type is unsupported"
 
 var ErrUserNotFound = "user not found"
 var ErrUserExisted = "user already existed"

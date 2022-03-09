@@ -80,7 +80,7 @@ func main() {
 		oauth.POST("/user/register", createUserHandler)
 	}
 
-	docs.SwaggerInfo.BasePath = "/oauth"
+	docs.SwaggerInfo.BasePath = "/tm1/oauth"
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	port := getEnv("PORT", "8080")
 	router.Run(":" + port)

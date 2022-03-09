@@ -26,7 +26,8 @@
     ```
 3. Hit the endpoint. Example: [localhost:8080/swagger/index.html](http://localhost:8080/swagger/index.html)
 4. For more info, check swagger (endpoint 4 or just click link above)
-5. To exit, Run this command on your terminal
+5. You can also use the postman that is provided in this repository. There are 3 postman environments that you can choose depending on the host that you are trying to connect. Also, There is a postman collection that you can play with.
+6. To exit, Run this command on your terminal
     ```console 
     docker compose down -v
     ```

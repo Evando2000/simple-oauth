@@ -7,13 +7,13 @@ import (
 )
 
 // @Title TM1 LAW: OAuth Service
-// @BasePath /oauth
+// @BasePath /tm1/oauth
 
 // @Summary get access token and refresh token
 // @Schemes
 // @Description This function will create new access_token and refresh_token if existing user does not have both. It will return current access_token and refresh_token if user's access_token or refresh_token is not expired yet.
 // @Tags Token
-// @Accept application/x-www-form-urlencoded
+// @Accept x-www-form-urlencoded
 // @Produce json
 // @Param username formData string true "Please insert username" minlength(1)
 // @Param password formData string true "Please insert password" minlength(1)
@@ -92,7 +92,7 @@ func createTokenHandler(c *gin.Context) {
 // @Schemes
 // @Description This function will return the resource if user is authorized
 // @Tags Resource
-// @Accept application/x-www-form-urlencoded
+// @Accept x-www-form-urlencoded
 // @Produce json
 // @Param Authorization header string false "Please insert access_token"
 // @Success 200 {object} TokenInfoResponse
@@ -111,7 +111,7 @@ func getResourceHandler(c *gin.Context) {
 // @Schemes
 // @Description This function will create new access_token and refresh_token if refresh_token is still valid. If new tokens are created then old tokens will be deleted
 // @Tags Token
-// @Accept application/x-www-form-urlencoded
+// @Accept x-www-form-urlencoded
 // @Produce json
 // @Param refresh_token formData string true "Please insert refresh_token" minlength(1)
 // @Success 200 {object} TokenInfoResponse
@@ -132,7 +132,7 @@ func refreshTokenHandler(c *gin.Context) {
 // @Schemes
 // @Description This function will create a new user if does not exist. It will also create user's access_token with refresh_token
 // @Tags User
-// @Accept application/x-www-form-urlencoded
+// @Accept x-www-form-urlencoded
 // @Produce json
 // @Param username formData string true "Please insert username" minlength(1)
 // @Param password formData string true "Please insert password" minlength(1)

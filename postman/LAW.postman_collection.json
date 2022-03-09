@@ -1,0 +1,263 @@
+{
+	"info": {
+		"_postman_id": "f9fbb278-a505-4c1d-abdb-0a24b802ea60",
+		"name": "LAW",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "TM",
+			"item": [
+				{
+					"name": "TM1",
+					"item": [
+						{
+							"name": "Create Token",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "username",
+											"value": "unicorn",
+											"type": "default"
+										},
+										{
+											"key": "password",
+											"value": "coba123",
+											"type": "default"
+										},
+										{
+											"key": "grant_type",
+											"value": "password",
+											"type": "default"
+										},
+										{
+											"key": "client_id",
+											"value": "7162",
+											"type": "default"
+										},
+										{
+											"key": "client_secret",
+											"value": "1231",
+											"type": "default"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{host}}/oauth/token",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"oauth",
+										"token"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Token Cyril",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "username",
+											"value": "cyril_s",
+											"type": "default"
+										},
+										{
+											"key": "password",
+											"value": "mysecretpassword",
+											"type": "default"
+										},
+										{
+											"key": "grant_type",
+											"value": "password",
+											"type": "default"
+										},
+										{
+											"key": "client_id",
+											"value": "4322",
+											"type": "default"
+										},
+										{
+											"key": "client_secret",
+											"value": "mysecretclient",
+											"type": "default"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{host}}/oauth/token",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"oauth",
+										"token"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Resource",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer da19fd0d88c8cdfb215f85b6b95f389695e52ee2",
+										"type": "default"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": []
+								},
+								"url": {
+									"raw": "{{host}}/oauth/resource",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"oauth",
+										"resource"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Refresh Token",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "refresh_token",
+											"value": "213c6f4156872209f5aec21c28a53d85668b07a7",
+											"type": "default"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{host}}/oauth/token/refresh",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"oauth",
+										"token",
+										"refresh"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create User",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "username",
+											"value": "cyril_s",
+											"type": "default"
+										},
+										{
+											"key": "password",
+											"value": "mysecretpassword",
+											"type": "default"
+										},
+										{
+											"key": "full_name",
+											"value": "Cyril Sampson",
+											"type": "default"
+										},
+										{
+											"key": "npm",
+											"value": "1806981928",
+											"type": "default"
+										},
+										{
+											"key": "client_id",
+											"value": "4322",
+											"type": "default"
+										},
+										{
+											"key": "client_secret",
+											"value": "mysecretclient",
+											"type": "default"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{host}}/oauth/user/register",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"oauth",
+										"user",
+										"register"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Lab",
+			"item": [
+				{
+					"name": "Lab1",
+					"item": [
+						{
+							"name": "Lab 1",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://open.er-api.com/v6/latest/IDR",
+									"protocol": "https",
+									"host": [
+										"open",
+										"er-api",
+										"com"
+									],
+									"path": [
+										"v6",
+										"latest",
+										"IDR"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}
