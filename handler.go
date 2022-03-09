@@ -7,7 +7,7 @@ import (
 )
 
 // @Title TM1 LAW: OAuth Service
-// @BasePath /tm1/oauth
+// @BasePath /oauth
 
 // @Summary get access token and refresh token
 // @Schemes
